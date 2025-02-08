@@ -1,0 +1,117 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local autoDigCooldown = 1
+local tool = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
+local bTool = game.Players.LocalPlayer.Backpack:FindFirstChildOfClass("Tool")
+local plr = game:GetService("Players").LocalPlayer
+local plrChar = game.Workspace:FindFirstChild(plr.Name)
+local abilityOn = false
+local autoDig = false
+local autoConvert = false
+local convert = game.Workspace:FindFirstChild("Convert")
+local noHive = true
+
+
+for _, v in ipairs(workspace.Hives:GetChildren()) do
+    if v:FindFirstChild("Claimed").Value == false and noHive == true then
+        local claimHandler = v.Platform.Top.Proxy.Handler
+        local proxy = claimHandler.Parent.Parent:WaitForChild("Proxy")
+
+        game:GetService("ReplicatedStorage").Remotes.ClaimHive:FireServer(proxy.Parent.Parent.Parent)
+        noHive = false
+    else
+        noHive = false
+    end
+end
+
+Rayfield:Notify({
+   Title = "Hive Update",
+   Content = "Claimed Hive!",
+   Duration = 6.5,
+   Image = 0,
+})
+
+
+game:GetService('StarterGui'):SetCoreGuiEnabled(Enum.CoreGuiType.Backpack, false)
+
+        if plrChar:FindFirstChildOfClass("Tool") then
+            print("Player has a tool already")
+        else
+            bTool.Parent = plrChar
+        end
+
+local autoDigNormalArgs = {
+
+    [1] = false
+
+}
+
+
+local Window = Rayfield:CreateWindow({
+    Name = "sizanware",
+    Icon = 0, -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+    LoadingTitle = "sizanware v1",
+    LoadingSubtitle = "by qsizan",
+    Theme = "AmberGlow", -- Check https://docs.sirius.menu/rayfield/configuration/themes
+ 
+    DisableRayfieldPrompts = false,
+    DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
+ 
+    ConfigurationSaving = {
+       Enabled = true,
+       FolderName = sizanware, -- Create a custom folder for your hub/game
+       FileName = "sw_cfg1"
+    },
+ 
+ })
+
+
+ local Tab = Window:CreateTab("Main Tab") -- Title, Image
+
+ local Section = Tab:CreateSection("Farming")
+
+ local Toggle = Tab:CreateToggle({
+    Name = "Auto-Dig",
+    CurrentValue = false,
+    Flag = "Toggle1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(Value)
+        autoDig = Value
+        while autoDig == true do
+            if abilityOn == false then
+                wait(autoDigCooldown)            
+                plr.Character:FindFirstChildOfClass("Tool").ToolRemote:FireServer(unpack(autoDigNormalArgs))
+            else
+                wait(autoDigCooldown)            
+                plr.Character:FindFirstChildOfClass("Tool"):FireServer(unpack(autoDigAbilityArgs))
+            end
+        end
+    end
+    })
+
+
+
+ local Input = Tab:CreateInput({
+    Name = "Auto-Dig Speed",
+    CurrentValue = "1",
+    PlaceholderText = "Type in desired speed",
+    RemoveTextAfterFocusLost = false,
+    Flag = "Input1",
+    Callback = function(Text)
+    
+        autoDigCooldown = Text
+
+    end,
+ })
+
+ local Toggle = Tab:CreateToggle({
+    Name = "Auto-Convert",
+    CurrentValue = false,
+    Flag = "Toggle2", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(Value)
+        autoConvert = Value
+        while autoConvert == true do
+            convert.CFrame = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame
+            wait(0.1)
+            convert.Position = Vector3.new(50, 1000, 50)
+        end
+    end
+    })
