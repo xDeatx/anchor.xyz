@@ -1,3 +1,4 @@
+ ![Без названия](https://github.com/user-attachments/assets/569126dd-855b-4602-bcad-2983f2877fd7)
 # sizanware
 Remastered version of Pinecone for game Bee Swarm Simulator Remix / BSS X. In this version, there is more optimized code, and no buggy features anymore.
 
