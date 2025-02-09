@@ -5,7 +5,7 @@ Remastered version of Pinecone for game Bee Swarm Simulator Remix / BSS X. In th
 ![SizanWare](https://github.com/user-attachments/assets/ee207e04-026f-4714-b258-9227a72d4bc4)
 
 # Loadstring:
-```loadstring(game:HttpGet("https://raw.githubusercontent.com/xDeatx/sizanware/refs/heads/main/code"))() ```
+<clipboard-copy>```loadstring(game:HttpGet("https://raw.githubusercontent.com/xDeatx/sizanware/refs/heads/main/code"))() ```
 
 
 ## Farming Functions:
