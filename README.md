@@ -1,4 +1,4 @@
- ![Без названия](https://github.com/user-attachments/assets/569126dd-855b-4602-bcad-2983f2877fd7)
+ ![SW](https://github.com/user-attachments/assets/1190d625-d45d-4bac-a952-338d7373c947)
 # sizanware
 Remastered version of Pinecone for game Bee Swarm Simulator Remix / BSS X. In this version, there is more optimized code, and no buggy features anymore.
 
@@ -26,6 +26,7 @@ Dupe Oils
 
 ## Other
 Open hidden/normal shops
+
 Redeem All Codes (Won't work if u already redeemed all of them.)
 
 
