@@ -19,9 +19,10 @@ Steal All Tokens (OP!)
 
 ## Duping Functions:
 Dupe Glue
+
 Dupe Super Potions
+
 Dupe Oils
-Dupe Food ( in future ;) )
 
 ## Other
 Open hidden/normal shops
