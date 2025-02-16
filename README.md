@@ -6,7 +6,7 @@ Remastered version of Pinecone for game Bee Swarm Simulator Remix / BSS X. In th
 
 
 # Script:
-**```loadstring(game:HttpGet("https://raw.githubusercontent.com/xDeatx/anchor/refs/heads/main/code"))() ```**
+```loadstring(game:HttpGet("https://raw.githubusercontent.com/xDeatx/anchor.xyz/refs/heads/main/code"))()```
 
 
 ## Farming Functions:
