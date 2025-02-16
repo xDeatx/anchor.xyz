@@ -1,5 +1,4 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
-local autoDigCooldown = 1
 local tool = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
 local plr = game:GetService("Players").LocalPlayer
 local plrChar = game.Workspace:FindFirstChild(plr.Name)
@@ -69,21 +68,6 @@ end)()
 
 --// Arguments
 
-local sprinklerArgs = {
-    [1] = "Sprinkler",
-    [2] = workspace:WaitForChild("Fields"):WaitForChild("Pumpkin Field"):WaitForChild("FieldBox")
-}
-
-local autoDigNormalArgs = {
-
-    [1] = false
-
-}
-
-local oilArgs = {
-    [1] = "Oil Dispenser",
-    [2] = 0
-}
 
 local superPotArgs = {
     [1] = "Super Potion Dispenser",
@@ -173,8 +157,13 @@ local Toggle = Tab:CreateToggle({
                 local find = string.match(v.Name, plr.Name)
                 if find == nil then
                     wait(1)
-                    game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("UseItem"):FireServer(unpack(sprinklerArgs))
+                    game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("UseItem"):FireServer("Sprinkler", workspace:WaitForChild("Fields"):WaitForChild(choosenField):WaitForChild("FieldBox"))
                     wait(2)
+                else
+                    
+                    game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("UseItem"):FireServer("Sprinkler")
+                    wait(3)
+                    
                 end
             end
         end
@@ -217,15 +206,25 @@ local Toggle = Tab:CreateToggle({
         autoDig = Value
         while autoDig == true do
             if abilityOn == false then
-                wait(autoDigCooldown)            
-                plr.Character:FindFirstChildOfClass("Tool").ToolRemote:FireServer(unpack(autoDigNormalArgs))
+                wait(plr.Character:FindFirstChildOfClass("Tool").Speed.Value)            
+                plr.Character:FindFirstChildOfClass("Tool").ToolRemote:FireServer(false)
             else
-                wait(autoDigCooldown)            
-                plr.Character:FindFirstChildOfClass("Tool"):FireServer(unpack(autoDigAbilityArgs))
+                wait(plr.Character:FindFirstChildOfClass("Tool").Speed.Value)           
+                plr.Character:FindFirstChildOfClass("Tool").ToolRemote:FireServer(true)
             end
         end
     end
     })
+
+    local Toggle = Tab:CreateToggle({
+        Name = "Auto-Ability",
+        CurrentValue = false,
+        Flag = "Toggle2", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+        Callback = function(Value)
+            abilityOn = Value
+
+        end
+        })
 
 
  local Toggle = Tab:CreateToggle({
@@ -243,21 +242,26 @@ local Toggle = Tab:CreateToggle({
     })
 
 
+    local Slider = Tab:CreateSlider({
+        Name = "Dig Speed",
+        Range = {0.01, 1},
+        Increment = 0.01,
+        Suffix = "",
+        CurrentValue = plr.Character:FindFirstChildOfClass("Tool"):WaitForChild("Speed").Value,
+        Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+        Callback = function(Value)
+            
+            while true do
+                task.wait()
+                plr.Character:FindFirstChildOfClass("Tool"):WaitForChild("Speed").Value = Value
+            end
+    
+        end,
+     })
+
+
 local Divider = Tab:CreateDivider()
     
- local Input = Tab:CreateInput({
-    Name = "Auto-Dig Speed",
-    CurrentValue = "1",
-    PlaceholderText = "Type in desired speed",
-    RemoveTextAfterFocusLost = false,
-    Flag = "Input1",
-    Callback = function(Text)
-    
-        autoDigCooldown = Text
-
-    end,
- })
-
   local Toggle = Tab:CreateToggle({
     Name = "Huge Token Hitbox",
     CurrentValue = false,
@@ -299,45 +303,6 @@ local Divider = Tab:CreateDivider()
         })
 
     
-            
-
-            
-    local Tab2 = Window:CreateTab("Dupes")
-
-     local Section2 = Tab2:CreateSection("Material Dupes")
-
-    local Button = Tab2:CreateButton({
-        Name = "Dupe Glue",
-        Callback = function()
-            
-            for i = 100, 0, -1 do
-            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("UseMachine"):FireServer(unpack(glueArgs))
-            end
-
-        end,
-     })
-
-     local Button = Tab2:CreateButton({
-        Name = "Dupe Oil",
-        Callback = function()
-            
-            for i = 100, 0, -1 do
-            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("UseMachine"):FireServer(unpack(oilArgs))
-            end
-
-        end,
-     })
-
-     local Button = Tab2:CreateButton({
-        Name = "Dupe Super Potions",
-        Callback = function()
-            
-            for i = 100, 0, -1 do
-            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("UseMachine"):FireServer(unpack(superPotArgs))
-            end
-
-        end,
-     })
 
 
 local Tab3 = Window:CreateTab("Other")
@@ -455,10 +420,3 @@ local Button = Tab3:CreateButton({
         end
     end
 })
-
-
-
-
-
-
-     
