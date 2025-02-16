@@ -23,12 +23,12 @@ Huge Token Hitbox (OP!)
 
 Steal All Tokens (OP!)
 
-## Duping Functions:
-Dupe Glue
+## Duping Functions (PATCHED):
+~~Dupe Glue~~
 
-Dupe Super Potions
+~~Dupe Super Potions~~
 
-Dupe Oils
+~~Dupe Oils~~
 
 ## Other
 Change Walkspeed
@@ -42,7 +42,7 @@ Redeem All Codes (Won't work if u already redeemed all of them.)
 ![image](https://github.com/user-attachments/assets/5a346215-19cb-4d2b-92ae-e2211d780d56)
 
 
-### Dupes Tab
+### ~~Dupes Tab~~ (PATCHED)
 ![image](https://github.com/user-attachments/assets/6116ecfb-380c-4ae3-94eb-05d66347851d)
 
 ### Other
