@@ -1,15 +1,17 @@
  
-# sizanware
+# anchor.xyz
 Remastered version of Pinecone for game Bee Swarm Simulator Remix / BSS X. In this version, there is more optimized code, and no buggy features anymore.
 
 ![SizanWare](https://github.com/user-attachments/assets/ee207e04-026f-4714-b258-9227a72d4bc4)
 
 # Script:
-**```loadstring(game:HttpGet("https://raw.githubusercontent.com/xDeatx/sizanware/refs/heads/main/code"))() ```**
+**```loadstring(game:HttpGet("https://raw.githubusercontent.com/xDeatx/anchor/refs/heads/main/code"))() ```**
 
 
 ## Farming Functions:
 Teleport to choosen field
+
+Auto Farm
 
 Auto-Dig
 
@@ -31,17 +33,24 @@ Dupe Super Potions
 Dupe Oils
 
 ## Other
+Change Walkspeed
+
 Open hidden/normal shops
 
 Redeem All Codes (Won't work if u already redeemed all of them.)
 
 
 ### Farming Tab
-![image](https://github.com/user-attachments/assets/19657b0a-8d53-44e8-8698-875cf96cd7eb)
+![image](https://github.com/user-attachments/assets/5a346215-19cb-4d2b-92ae-e2211d780d56)
+
+
 ### Dupes Tab
-![image](https://github.com/user-attachments/assets/0b83c649-56cd-41cb-bd8f-004d1c9a34a4)
+![image](https://github.com/user-attachments/assets/6116ecfb-380c-4ae3-94eb-05d66347851d)
+
 ### Other
-![image](https://github.com/user-attachments/assets/63072413-b171-4b47-b2ca-da2cb9298da8)
+![image](https://github.com/user-attachments/assets/f3e0db2f-c8a4-4a10-bb8a-596308ff93d8)
+
+
 
 
 
