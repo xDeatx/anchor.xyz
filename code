@@ -1,0 +1,464 @@
+local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+local autoDigCooldown = 1
+local tool = game.Players.LocalPlayer.Character:FindFirstChildOfClass("Tool")
+local plr = game:GetService("Players").LocalPlayer
+local plrChar = game.Workspace:FindFirstChild(plr.Name)
+local abilityOn = false
+local autoDig = false
+local autoConvert = false
+local convert = game.Workspace:FindFirstChild("Convert")
+local noHive = true
+local gui = plr.PlayerGui.Main
+local currentHive = nil
+local choosenField = "Ant Field"
+local autoFarming = false
+local HRP = plr.Character.HumanoidRootPart
+local HMD = plr.Character.Humanoid
+local hugeTokens = false
+local stealTokens = false
+local normalSpeed = HMD.WalkSpeed
+local autoEquip = false
+local tween_s = game:GetService("TweenService")
+
+
+
+
+for _, v in ipairs(workspace.Hives:GetChildren()) do
+    if v:FindFirstChild("Claimed").Value == false and noHive == true then
+        local claimHandler = v.Platform.Top.Proxy.Handler
+        local proxy = claimHandler.Parent.Parent:WaitForChild("Proxy")
+
+        game:GetService("ReplicatedStorage").Remotes.ClaimHive:FireServer(proxy.Parent.Parent.Parent)
+        noHive = false
+
+        Rayfield:Notify({
+            Title = "Hive Notification",
+            Content = "Claimed Hive!",
+            Duration = 4,
+            Image = "check",
+         })
+
+        elseif v:FindFirstChild("Claimed").Value == true and noHive == true then
+        noHive = false
+        Rayfield:Notify({
+            Title = "Hive Notification",
+            Content = "Hive is already claimed.",
+            Duration = 4,
+            Image = "octagon-alert",
+         })
+    end
+end
+
+
+print("⚓ anchor.xyz | Started...")
+
+game:GetService('StarterGui'):SetCoreGuiEnabled(Enum.CoreGuiType.Backpack, false)
+
+coroutine.wrap(function()
+    
+    while true do
+        task.wait()
+        if plr.Backpack:FindFirstChildOfClass("Tool") then
+            local bTool = game.Players.LocalPlayer.Backpack:FindFirstChildOfClass("Tool")
+            bTool.Parent = plrChar 
+            print("⚓ anchor.xyz | Equipped "..plr.Character:FindFirstChildOfClass("Tool").Name)
+        end
+    end
+    
+end)()
+
+--// Arguments
+
+local sprinklerArgs = {
+    [1] = "Sprinkler",
+    [2] = workspace:WaitForChild("Fields"):WaitForChild("Pumpkin Field"):WaitForChild("FieldBox")
+}
+
+local autoDigNormalArgs = {
+
+    [1] = false
+
+}
+
+local oilArgs = {
+    [1] = "Oil Dispenser",
+    [2] = 0
+}
+
+local superPotArgs = {
+    [1] = "Super Potion Dispenser",
+    [2] = 0
+}
+
+local glueArgs = {
+    [1] = "Glue Dispenser",
+    [2] = 0
+}
+
+
+local Window = Rayfield:CreateWindow({
+    Name = "anchor.xyz",
+    Icon = "anchor", -- Icon in Topbar. Can use Lucide Icons (string) or Roblox Image (number). 0 to use no icon (default).
+    LoadingTitle = "anchor.xyz | also try amethyst.gg!",
+    LoadingSubtitle = "by qsizan",
+    Theme = "DarkBlue", -- Check https://docs.sirius.menu/rayfield/configuration/themes
+ 
+    DisableRayfieldPrompts = true,
+    DisableBuildWarnings = false, -- Prevents Rayfield from warning when the script has a version mismatch with the interface
+ 
+    ConfigurationSaving = {
+       Enabled = true,
+       FolderName = anchor, -- Create a custom folder for your hub/game
+       FileName = "BSSR"
+    },
+ 
+ })
+
+
+
+
+
+    -- // Functions
+
+    function tweenToToken()
+    
+    
+        for _,v in pairs(workspace.Fields[choosenField].FieldBox:GetTouchingParts()) do
+            if v.Name == plr.Name then
+
+                local Distance = (v.Position - HRP.Position).Magnitude
+                print(Distance)
+                local Speed = 0.05  
+                local TweenTime = Speed * Distance/15
+
+                local tweenInfo = TweenInfo.new(TweenTime,Enum.EasingStyle.Linear)
+
+                print("Tweening to "..v.Name)
+                local the = tween_s:Create(HRP, tweenInfo, {CFrame = v.CFrame})
+                the:Play()
+
+                
+                
+                HRP.Touched:Connect(function(hit)
+                    if hit:IsA("Part") and hit.Parent:IsA("Folder") and hit.Name == plr.Name then
+                        wait(0.1)
+                        hit:Destroy()
+                    end
+                end)
+            end 
+        end
+
+
+    end
+
+local Tab = Window:CreateTab("Farming") -- Title, Image
+
+local Section = Tab:CreateSection("Farming")
+
+local Toggle = Tab:CreateToggle({
+    Name = "Auto-Farm",
+    CurrentValue = false,
+    Flag = "Toggle2", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(Value)
+        autoFarming = Value
+
+        if autoFarming == true then
+            for _,v in pairs(workspace.Fields:GetChildren()) do
+                if v.Name == choosenField then
+                    HRP.CFrame = v.FieldBox.CFrame
+                end
+            end
+
+            for _,v in pairs(workspace.Sprinklers:GetChildren()) do
+                local find = string.match(v.Name, plr.Name)
+                if find == nil then
+                    wait(1)
+                    game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("UseItem"):FireServer(unpack(sprinklerArgs))
+                    wait(2)
+                end
+            end
+        end
+
+        while autoFarming == true do
+
+            wait(0.5)
+            tweenToToken()
+
+        end
+    end
+    })
+
+
+    local Dropdown = Tab:CreateDropdown({
+        Name = "Choose Field",
+        Options = {"Ant Field","Area Field","Bamboo Field","Blueberry Field","Cactus Field","Cave Field","Clover Field","Coconut Field","Gummy Field","Jungle Field","Leaf Field","Pepper Field","PineTree Field","Pumpkin Field","Rose Field","Strawberry Field","Stump Field","White Field"},
+        CurrentOption = {"Ant Field"},
+        MultipleOptions = false,
+        Flag = "Dropdown1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+        Callback = function(Options)
+
+            for i,v in pairs(game.Workspace.Fields:GetChildren()) do
+                if v.Name == Options[1] and autoFarming == true then
+                    choosenField = Options[1]
+                else
+                    choosenField = Options[1]
+                end
+            end
+        end,
+     })
+
+
+
+ local Toggle = Tab:CreateToggle({
+    Name = "Auto-Dig",
+    CurrentValue = false,
+    Flag = "Toggle2", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(Value)
+        autoDig = Value
+        while autoDig == true do
+            if abilityOn == false then
+                wait(autoDigCooldown)            
+                plr.Character:FindFirstChildOfClass("Tool").ToolRemote:FireServer(unpack(autoDigNormalArgs))
+            else
+                wait(autoDigCooldown)            
+                plr.Character:FindFirstChildOfClass("Tool"):FireServer(unpack(autoDigAbilityArgs))
+            end
+        end
+    end
+    })
+
+
+ local Toggle = Tab:CreateToggle({
+    Name = "Auto-Convert",
+    CurrentValue = false,
+    Flag = "Toggle3", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(Value)
+        autoConvert = Value
+        while autoConvert == true do
+            convert.CFrame = HRP.CFrame
+            wait(0.1)
+            convert.Position = Vector3.new(50, 1000, 50)
+        end
+    end
+    })
+
+
+local Divider = Tab:CreateDivider()
+    
+ local Input = Tab:CreateInput({
+    Name = "Auto-Dig Speed",
+    CurrentValue = "1",
+    PlaceholderText = "Type in desired speed",
+    RemoveTextAfterFocusLost = false,
+    Flag = "Input1",
+    Callback = function(Text)
+    
+        autoDigCooldown = Text
+
+    end,
+ })
+
+  local Toggle = Tab:CreateToggle({
+    Name = "Huge Token Hitbox",
+    CurrentValue = false,
+    Flag = "Toggle4", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(Value)
+        hugeTokens = Value
+        
+         while true do
+            task.wait()
+            for _,v in pairs(game.Workspace.Debris.Tokens:GetChildren()) do
+                if v.Name == plr.Name and hugeTokens == true then
+                    v.Size = Vector3.new(100,100,100)
+                else
+                    v.Size = Vector3.new(1.4677, 1.4677, 1.4677)
+                end
+            end
+        end
+    end
+    })
+
+    local Toggle = Tab:CreateToggle({
+        Name = "Steal All Tokens",
+        CurrentValue = false,
+        Flag = "Toggle5", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+        Callback = function(Value)
+
+            stealTokens = Value
+            
+             while wait(0.05) do
+                for _,v in pairs(game.Workspace.Debris.Tokens:GetChildren()) do
+                    if v.Name == "All" and stealTokens == true then
+                        v.Size = Vector3.new(1000,1000,1000)
+                    else
+                        v.Size = Vector3.new(1.4677, 1.4677, 1.4677)
+                    end
+                end
+            end
+        end
+        })
+
+    
+            
+
+            
+    local Tab2 = Window:CreateTab("Dupes")
+
+     local Section2 = Tab2:CreateSection("Material Dupes")
+
+    local Button = Tab2:CreateButton({
+        Name = "Dupe Glue",
+        Callback = function()
+            
+            for i = 100, 0, -1 do
+            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("UseMachine"):FireServer(unpack(glueArgs))
+            end
+
+        end,
+     })
+
+     local Button = Tab2:CreateButton({
+        Name = "Dupe Oil",
+        Callback = function()
+            
+            for i = 100, 0, -1 do
+            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("UseMachine"):FireServer(unpack(oilArgs))
+            end
+
+        end,
+     })
+
+     local Button = Tab2:CreateButton({
+        Name = "Dupe Super Potions",
+        Callback = function()
+            
+            for i = 100, 0, -1 do
+            game:GetService("ReplicatedStorage"):WaitForChild("Remotes"):WaitForChild("UseMachine"):FireServer(unpack(superPotArgs))
+            end
+
+        end,
+     })
+
+
+local Tab3 = Window:CreateTab("Other")
+
+local Button = Tab3:CreateButton({
+    Name = "Open Wind Shrine",
+    Callback = function()
+
+        if plr.PlayerGui.Main["Wind Shrine"].Visible == true then
+
+            plr.PlayerGui.Main["Wind Shrine"].Visible = false
+
+        else
+
+            plr.PlayerGui.Main["Wind Shrine"].Visible = true
+
+        end
+
+
+    end,
+})
+
+local Button = Tab3:CreateButton({
+    Name = "Open Market",
+    Callback = function()
+
+        if plr.PlayerGui.Main.TrophyShop.Visible == true then
+        plr.PlayerGui.Main.TrophyShop.Visible = false
+        else
+        plr.PlayerGui.Main.TrophyShop.Visible = true
+        end
+        
+
+
+    end,
+})
+
+local Button = Tab3:CreateButton({
+    Name = "Open Blender",
+    Callback = function()
+
+        
+
+        if plr.PlayerGui.Main.Blender.Visible == true then
+
+            plr.PlayerGui.Main.Blender.Visible = false
+
+        else
+
+            plr.PlayerGui.Main.Blender.Visible = true
+
+        end
+
+    end,
+})
+
+local Button = Tab3:CreateButton({
+    Name = "Open Summer Shop",
+    Callback = function()
+
+        if plr.PlayerGui.Main.Machine1.Visible == true then
+
+            plr.PlayerGui.Main.Machine1.Visible = false
+
+        else
+
+            plr.PlayerGui.Main.Machine1.Visible = true
+
+        end
+
+
+    end,
+})
+
+local Button = Tab3:CreateButton({
+    Name = "Open Broken Machine",
+    Callback = function()
+
+        if plr.PlayerGui.Main.Machine.Visible == true then
+        plr.PlayerGui.Main.Machine.Visible = false
+        else
+        plr.PlayerGui.Main.Machine.Visible = true
+        end
+
+
+    end,
+})
+
+local Divider = Tab3:CreateDivider()
+
+local Slider = Tab3:CreateSlider({
+    Name = "Walkspeed",
+    Range = {1, 70},
+    Increment = 1,
+    Suffix = "",
+    CurrentValue = HMD.WalkSpeed,
+    Flag = "Slider1", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(Value)
+        
+        while true do
+            task.wait()
+            HMD.WalkSpeed = Value
+        end
+
+    end,
+ })
+
+local Button = Tab3:CreateButton({
+    Name = "Redeem All Codes",
+    Callback = function()
+        for _,v in pairs(plr.Codes:GetChildren()) do
+            if v:IsA("IntValue") and v.Value ~= 1 then
+                game:GetService("ReplicatedStorage"):WaitForChild("RedeemCode"):FireServer(v.Name)      
+            end
+        end
+    end
+})
+
+
+
+
+
+
+     
