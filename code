@@ -456,7 +456,6 @@ local Button = Tab3:CreateButton({
     end
 })
 
---// Claim Hive
 
 
 
