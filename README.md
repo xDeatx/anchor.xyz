@@ -2,9 +2,6 @@
 # anchor.xyz
 Remastered version of Pinecone for game Bee Swarm Simulator Remix / BSS X. In this version, there is more optimized code, and no buggy features anymore.
 
-![anchorxyz](https://github.com/user-attachments/assets/f21aa684-85e0-4f53-b7d0-5efc5f8a0836)
-
-
 # Script:
 ```loadstring(game:HttpGet("https://raw.githubusercontent.com/xDeatx/anchor.xyz/refs/heads/main/code"))()```
 
